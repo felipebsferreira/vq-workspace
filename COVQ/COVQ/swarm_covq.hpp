@@ -214,12 +214,12 @@ double SWARM_COVQ::CalcularDEQ(double *vetor_treino, double *vetor_dic)
     int i;
     
     distq = 0.0;
-    
+
     for(i = 0; i < K; i++)
     {
         distq += (vetor_treino[i] - vetor_dic[i]) * (vetor_treino[i] - vetor_dic[i]);
     }
-    
+
     return distq;
 }
 
@@ -663,13 +663,13 @@ void SWARM_COVQ::ClassificarPorIEENNS(double **treino, double **dic, int *partic
         dist_aux = 0;
         count_up = Classifica_Dif[n];
         count_down = Classifica_Dif[n];
-        
+    
         for(j = 0; j < N; j++)
         {
             dist += matriz_prob[Sort_Mean_c[Classifica_Dif[n]]][j] * CalcularDEQ(treino[n], dic[j]);
             particao[n] = Sort_Mean_c[Classifica_Dif[n]];
         }
-        
+    
         while(true)
         {
             if(count_down != 0)

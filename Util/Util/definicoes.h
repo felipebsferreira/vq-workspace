@@ -39,6 +39,7 @@ enum SWARM_TYPE
     PSO,
     FF,
     HBMO,
+    FW,
     FUZZY,
     FF_NH
 };
@@ -87,7 +88,7 @@ struct Particle
 struct Firework
 {
     double **position;
-    double ***sparks;
+    Firework *sparks;
     int qty_sparks;
     int *particao;
     double error;

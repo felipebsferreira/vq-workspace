@@ -11,7 +11,7 @@
 #include "pso_covq.hpp"
 #include "fss_covq.hpp"
 #include "ff_covq.hpp"
-#include "ff_covq_nh.hpp"
+#include "fw_covq.hpp"
 #include "swarm_covq.hpp"
 #include "../../Util/Util/general.h"
 #include "../../Util/Util/codec.h"
@@ -28,13 +28,12 @@ int main()
 {
     reset_rand();
 
-    sprintf(_str_swarm, "%s", "NO_SWARM");
+    sprintf(_str_swarm, "%s", "FF");
     _error_rate = 1;
 
     cout << "Taxa adicional: " << _error_rate << "\n";
-    //RodarSimulacao("lena", 0, IEENNS, NO_SWARM, NONE, 9);
 
-    RodarMoeaCovq(CriarInstancia(FSS, 32, 16, 1, 0.005, NONE, 1.6), "lena", IEENNS, 1);
+    RodarMoeaCovq(CriarInstancia(FF, 32, 16, 10, 0.005, NONE, 1.6), "lena", IEENNS, 1);
 
     return 0;
 }
@@ -93,8 +92,6 @@ void RodarSimulacao(const char *imagem, int N_limite, NNS nns, SWARM_TYPE swarm_
 
             myfile << SEPARADOR << val_psnr << SEPARADOR << iteracoes;
             myfile << SEPARADOR << duracao << SEPARADOR << dist;
-            //myfile << SEPARADOR << FormatNumber(val_psnr) << SEPARADOR << FormatNumber(iteracoes);
-            //myfile << SEPARADOR << FormatNumber(duracao) << SEPARADOR << FormatNumber(dist);
         }
 
         myfile << "\n";
@@ -125,8 +122,8 @@ SWARM_COVQ *CriarInstancia(SWARM_TYPE swarm_type, int N, int K, int qtd_part, do
             swarmCovq = new FF_COVQ(N, K, qtd_part, erro, scaleType, scale);
             break;
 
-        case FF_NH:
-            swarmCovq = new FF_COVQ_NH(N, K, qtd_part, erro, scaleType, scale);
+        case FW:
+            swarmCovq = new FW_COVQ(N, K, qtd_part, erro, scaleType, scale);
             break;
 
         default:

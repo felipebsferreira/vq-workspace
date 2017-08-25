@@ -21,7 +21,7 @@ double ***aloca_matriz3d(int n, int N, int K);
 
 void desaloca_matriz_int(int **pt, int N);
 void desaloca_matrizd(double **pt, int N);
-void desaloca_matriz3d(double **pt, int n, int N);
+void desaloca_matriz3d(double ***pt, int n, int N);
 
 int *aloca_vetor_int(int N){
     /*******************************************************************
