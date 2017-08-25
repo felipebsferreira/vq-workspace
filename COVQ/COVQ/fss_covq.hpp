@@ -31,7 +31,7 @@ public:
     double * Run(double **dic, double **treino, NNS nns);
     
     FSS_COVQ();
-    FSS_COVQ(int N, int K, int qtd_part, double erro, SCALING scaleType, double scale);
+    FSS_COVQ(int N, int K, int qtd_part, SWARM_TYPE swarm_type, double erro, SCALING scaleType, double scale);
     
 private:
     Fish * InitiateSchool(double **dic);
@@ -55,7 +55,7 @@ FSS_COVQ::FSS_COVQ() : SWARM_COVQ()
     
 }
 
-FSS_COVQ::FSS_COVQ(int N, int K, int qtd_part, double erro, SCALING scaleType, double scale) : SWARM_COVQ(N, K, qtd_part, erro, scaleType, scale)
+FSS_COVQ::FSS_COVQ(int N, int K, int qtd_part, SWARM_TYPE swarm_type, double erro, SCALING scaleType, double scale) : SWARM_COVQ(N, K, qtd_part, swarm_type, erro, scaleType, scale)
 {
     
 }

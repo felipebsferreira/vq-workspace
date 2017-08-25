@@ -335,6 +335,9 @@ const char *converter_swarm_string(SWARM_TYPE type)
         case HBMO:
             return "HBMO";
 
+        case FW:
+            return "FW";
+
         case FUZZY:
             return "FUZZY";
 

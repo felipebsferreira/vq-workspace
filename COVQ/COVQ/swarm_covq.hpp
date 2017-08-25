@@ -29,12 +29,14 @@ public:
     double erro;
     SCALING scaleType;
     double scale;
+    SWARM_TYPE swarm_type;
     
     virtual double * Run(double **dic, double **treino, NNS nns);
     
     // Construtores
     SWARM_COVQ();
     SWARM_COVQ(int N, int K, int qtd_part, double erro, SCALING scaleType, double scale);
+    SWARM_COVQ(int N, int K, int qtd_part, SWARM_TYPE swarm_type, double erro, SCALING scaleType, double scale);
     
     // Destrutores
     ~SWARM_COVQ();
@@ -90,6 +92,19 @@ SWARM_COVQ::SWARM_COVQ(int N, int K, int qtd_part, double erro, SCALING scaleTyp
     this->scale = scale;
     this->matriz_prob = montar_matriz_probabilidades(N, erro);
     this->gbest = NULL;
+}
+
+SWARM_COVQ::SWARM_COVQ(int N, int K, int qtd_part, SWARM_TYPE swarm_type, double erro, SCALING scaleType, double scale)
+{
+    this->N = N;
+    this->K = K;
+    this->qtd_part = qtd_part;
+    this->erro = erro;
+    this->scaleType = scaleType;
+    this->scale = scale;
+    this->matriz_prob = montar_matriz_probabilidades(N, erro);
+    this->gbest = NULL;
+    this->swarm_type = swarm_type;
 }
 
 SWARM_COVQ::~SWARM_COVQ()

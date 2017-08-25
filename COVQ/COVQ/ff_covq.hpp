@@ -26,7 +26,7 @@ public:
     double * Run(double **dic, double **treino, NNS nns);
     
     FF_COVQ();
-    FF_COVQ(int N, int K, int qtd_part, double erro, SCALING scaleType, double scale);
+    FF_COVQ(int N, int K, int qtd_part, SWARM_TYPE swarm_type, double erro, SCALING scaleType, double scale);
     
 private:
     
@@ -50,7 +50,7 @@ FF_COVQ::FF_COVQ() : SWARM_COVQ()
     
 }
 
-FF_COVQ::FF_COVQ(int N, int K, int qtd_part, double erro, SCALING scaleType, double scale) : SWARM_COVQ(N, K, qtd_part, erro, scaleType, scale)
+FF_COVQ::FF_COVQ(int N, int K, int qtd_part, SWARM_TYPE swarm_type, double erro, SCALING scaleType, double scale) : SWARM_COVQ(N, K, qtd_part, swarm_type, erro, scaleType, scale)
 {
     
 }

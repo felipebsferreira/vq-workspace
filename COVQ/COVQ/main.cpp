@@ -17,33 +17,40 @@
 #include "../../Util/Util/codec.h"
 #include "../../Util/Util/bsc.h"
 
-void RodarSimulacao(const char *imagem, int N_limite, NNS nns, SWARM_TYPE swarm_type, SCALING scaleType, double scale);
+void RodarSimulacao(const char *imagem, int N_limite, NNS nns, SWARM_TYPE swarm_type, int qtd_simulacoes, SCALING scaleType, double scale);
 SWARM_COVQ *CriarInstancia(SWARM_TYPE swarm_type, int N, int K, int qtd_part, double erro, SCALING scaleType, double scale);
 double *RodarMoeaCovq(SWARM_COVQ *swarm, const char *imagem, NNS nns, int simulacao);
-
-char _str_swarm[50];
-float _error_rate;
 
 int main()
 {
     reset_rand();
 
-    sprintf(_str_swarm, "%s", "FF");
-    _error_rate = 1;
+    const char *str_image = "lena";
+    int N = 32;
+    NNS nns = IEENNS;
+    SWARM_TYPE swarm_type = FW;
+    int qtd_simulacoes = 10;
+    SCALING scale_type = NONE;
+    double scale = 0;
 
-    cout << "Taxa adicional: " << _error_rate << "\n";
+    /*Rodar conjunto de simulações*/
+    /******************************/
+    RodarSimulacao(str_image, N, nns, swarm_type, qtd_simulacoes, scale_type, scale);
 
-    RodarMoeaCovq(CriarInstancia(FF, 32, 16, 10, 0.005, NONE, 1.6), "lena", IEENNS, 1);
+    /******************************/
+    /*Rodar apenas uma simulação  */
+    /******************************/
+    //RodarMoeaCovq(CriarInstancia(swarm_type, N, 16, 10, 0.005, scale_type, scale), str_image, nns, 1);
 
     return 0;
 }
 
-void RodarSimulacao(const char *imagem, int N_limite, NNS nns, SWARM_TYPE swarm_type, SCALING scaleType, double scale)
+void RodarSimulacao(const char *imagem, int N_limite, NNS nns, SWARM_TYPE swarm_type, int qtd_simulacoes, SCALING scaleType, double scale)
 {
     double *resultados;
     double iteracoes, duracao, val_psnr, dist;
     double erro[4] = {0.005, 0.01, 0.05, 0.1};
-    int N, qtd_part = 10, qtd_simulacoes = 10;
+    int N, qtd_part = 10;
     char nome[50];
     SWARM_COVQ *swarm_covq;
     ofstream myfile;
@@ -76,7 +83,7 @@ void RodarSimulacao(const char *imagem, int N_limite, NNS nns, SWARM_TYPE swarm_
             {
                 cout << "N = " << N << " / erro = "<< erro[j] << " / " << imagem << " / " << i + 1 << endl << endl;
 
-                swarm_covq = CriarInstancia(swarm_type, N, 16, qtd_part, erro[j]*_error_rate, scaleType, scale);
+                swarm_covq = CriarInstancia(swarm_type, N, 16, qtd_part, erro[j], scaleType, scale);
                 resultados = RodarMoeaCovq(swarm_covq, imagem, nns, i + 1);
 
                 iteracoes += resultados[0];
@@ -111,19 +118,19 @@ SWARM_COVQ *CriarInstancia(SWARM_TYPE swarm_type, int N, int K, int qtd_part, do
             break;
 
         case FSS:
-            swarmCovq = new FSS_COVQ(N, K, qtd_part, erro, scaleType, scale);
+            swarmCovq = new FSS_COVQ(N, K, qtd_part, FSS, erro, scaleType, scale);
             break;
 
         case PSO:
-            swarmCovq = new PSO_COVQ(N, K, qtd_part, erro, scaleType, scale);
+            swarmCovq = new PSO_COVQ(N, K, qtd_part, PSO, erro, scaleType, scale);
             break;
 
         case FF:
-            swarmCovq = new FF_COVQ(N, K, qtd_part, erro, scaleType, scale);
+            swarmCovq = new FF_COVQ(N, K, qtd_part, FF, erro, scaleType, scale);
             break;
 
         case FW:
-            swarmCovq = new FW_COVQ(N, K, qtd_part, erro, scaleType, scale);
+            swarmCovq = new FW_COVQ(N, K, qtd_part, FW, erro, scaleType, scale);
             break;
 
         default:
@@ -146,7 +153,8 @@ double *RodarMoeaCovq(SWARM_COVQ *swarm, const char *imagem, NNS nns, int simula
 
     ofstream myfile;
 
-    sprintf(nome, "resultados/b_%s_%.3f_%s.csv", imagem, swarm->erro, _str_swarm);
+    sprintf(nome, "resultados/b_%s_%.3f_%s.csv", imagem, swarm->erro, 
+        converter_swarm_string(swarm->swarm_type));
     myfile.open(nome, std::ofstream::out | std::ofstream::app);
 
     if(simulacao == 1 && swarm->N == 32)
@@ -172,13 +180,14 @@ double *RodarMoeaCovq(SWARM_COVQ *swarm, const char *imagem, NNS nns, int simula
     {
         cout << "Transmissao " << i + 1 << endl;
 
-        p_transmitida = bsc(p_codificada, nTreino, swarm->erro/_error_rate);
+        p_transmitida = bsc(p_codificada, nTreino, swarm->erro);
         imagem_quantizada = decodificar(dic, p_transmitida, K, N, nTreino);
 
         psnr = CalcularPSNR(treino, imagem_quantizada, nTreino, K, 256);
         psnr_medio += psnr;
 
-		sprintf(nome_recon, "reconstrucoes/%i_%.3f_%s_%s_%.2f.pgm", swarm->N, swarm->erro, imagem, _str_swarm, psnr);
+		sprintf(nome_recon, "reconstrucoes/%i_%.3f_%s_%s_%.2f.pgm", 
+            swarm->N, swarm->erro, imagem, converter_swarm_string(swarm->swarm_type), psnr);
 		//reconstruir_imagem(nome_recon, dic, p_transmitida, swarm->K, swarm->nTreino, 4, 256);
 
         free(p_transmitida);
@@ -195,8 +204,6 @@ double *RodarMoeaCovq(SWARM_COVQ *swarm, const char *imagem, NNS nns, int simula
     myfile << swarm->N;
     myfile << SEPARADOR << resultados[3] << SEPARADOR << resultados[0];
     myfile << SEPARADOR << resultados[1] << SEPARADOR << resultados[2];
-    //myfile << SEPARADOR << FormatNumber(resultados[3]) << SEPARADOR << FormatNumber(resultados[0]);
-    //myfile << SEPARADOR << FormatNumber(resultados[1]) << SEPARADOR << FormatNumber(resultados[2]);
     myfile << "\n";
 
     // Desalocar memória

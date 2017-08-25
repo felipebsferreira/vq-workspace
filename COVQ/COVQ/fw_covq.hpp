@@ -31,7 +31,7 @@ public:
     double * Run(double **dic, double **treino, NNS nns);
     
     FW_COVQ();
-    FW_COVQ(int N, int K, int qtd_part, double erro, SCALING scaleType, double scale);
+    FW_COVQ(int N, int K, int qtd_part, SWARM_TYPE swarm_type, double erro, SCALING scaleType, double scale);
     
 private:
     Firework * InitiateSwarm(double **dic);
@@ -55,7 +55,7 @@ FW_COVQ::FW_COVQ() : SWARM_COVQ()
 
 }
 
-FW_COVQ::FW_COVQ(int N, int K, int qtd_part, double erro, SCALING scaleType, double scale) : SWARM_COVQ(N, K, qtd_part, erro, scaleType, scale)
+FW_COVQ::FW_COVQ(int N, int K, int qtd_part, SWARM_TYPE swarm_type, double erro, SCALING scaleType, double scale) : SWARM_COVQ(N, K, qtd_part, swarm_type, erro, scaleType, scale)
 {
     m = qtd_part * 10;
     mHat = 5;             
