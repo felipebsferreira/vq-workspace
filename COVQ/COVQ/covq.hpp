@@ -61,9 +61,9 @@ double * COVQ::Run(double ** dic, double **treino, NNS nns)
     {
         Classificar(treino, dic, particao, nns);
         dist_atual = CalcularDistorcaoMedia(treino, dic, particao);
-
+        
         reducao = ((dist_anterior - dist_atual)/dist_anterior);
-
+        
         if(dist_atual == 0 || fabs(reducao) < limiar) break;
         dist_anterior = dist_atual;
 

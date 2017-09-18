@@ -672,19 +672,24 @@ void SWARM_COVQ::ClassificarPorIEENNS(double **treino, double **dic, int *partic
     Ordenar(Sort_Mean_c, Sort_Mean_inv, Mean_c);
     ClassificarMedias(Classifica_Dif, Sort_Mean_c, Sort_Mean_inv, params.mean_x, Mean_c);
     
+    for(int a = 0; a < N; a++)
+    {
+        cout << Sort_Mean_c[a] << endl;
+    }
+
     for(n = 0; n < nTreino; n++)
     {
         dist = 0;
         dist_aux = 0;
         count_up = Classifica_Dif[n];
         count_down = Classifica_Dif[n];
-    
+        
         for(j = 0; j < N; j++)
         {
             dist += matriz_prob[Sort_Mean_c[Classifica_Dif[n]]][j] * CalcularDEQ(treino[n], dic[j]);
             particao[n] = Sort_Mean_c[Classifica_Dif[n]];
         }
-    
+        
         while(true)
         {
             if(count_down != 0)
@@ -726,7 +731,7 @@ void SWARM_COVQ::ClassificarPorIEENNS(double **treino, double **dic, int *partic
             {
                 count_up++;
                 
-                if(count_up != N && Mean_c[Sort_Mean_c[count_up]] < params.mean_x[n] + sqrt(dist/K))
+                if(count_up < N && Mean_c[Sort_Mean_c[count_up]] < params.mean_x[n] + sqrt(dist/K))
                 {
                     variance = (params.variance_x[n] - Variance_c[Sort_Mean_c[count_up]])
                         * (params.variance_x[n] - Variance_c[Sort_Mean_c[count_up]]);
@@ -736,9 +741,11 @@ void SWARM_COVQ::ClassificarPorIEENNS(double **treino, double **dic, int *partic
                     if( K * mean + variance < dist)
                     {
                         dist_aux = 0;
-                        
+                        //cout << "flag 9" << endl;
                         for(j = 0; j < N; j++)
                         {
+                            if (Sort_Mean_c[count_up] >= 32)
+                                cout << Sort_Mean_c[count_up] << " " << j << " " << N << endl;
                             dist_aux += matriz_prob[Sort_Mean_c[count_up]][j] * CalcularDEQ(treino[n], dic[j]);
                             
                             if(dist_aux > dist) break;

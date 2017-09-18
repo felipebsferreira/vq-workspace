@@ -32,7 +32,7 @@ int main()
     int qtd_simulacoes = 10;
     SCALING scale_type = NONE;
     double scale = 0;
-
+    
     /*Rodar conjunto de simulações*/
     /******************************/
     RodarSimulacao(str_image, N, nns, swarm_type, qtd_simulacoes, scale_type, scale);

@@ -1,0 +1,10 @@
+# Byte-compiled / optimized / DLL files
+FuzzyEdson/
+MOEA/
+Segmentation/
+Simulacoes/
+Teste/
+*.csv
+*.dat
+*.dic
+*.o
