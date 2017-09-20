@@ -671,11 +671,6 @@ void SWARM_COVQ::ClassificarPorIEENNS(double **treino, double **dic, int *partic
     CalcularParamEENNS(dic, Mean_c, Variance_c, N); // Médias dos vetores-código
     Ordenar(Sort_Mean_c, Sort_Mean_inv, Mean_c);
     ClassificarMedias(Classifica_Dif, Sort_Mean_c, Sort_Mean_inv, params.mean_x, Mean_c);
-    
-    for(int a = 0; a < N; a++)
-    {
-        cout << Sort_Mean_c[a] << endl;
-    }
 
     for(n = 0; n < nTreino; n++)
     {
@@ -741,11 +736,9 @@ void SWARM_COVQ::ClassificarPorIEENNS(double **treino, double **dic, int *partic
                     if( K * mean + variance < dist)
                     {
                         dist_aux = 0;
-                        //cout << "flag 9" << endl;
+                        
                         for(j = 0; j < N; j++)
-                        {
-                            if (Sort_Mean_c[count_up] >= 32)
-                                cout << Sort_Mean_c[count_up] << " " << j << " " << N << endl;
+                        {                         
                             dist_aux += matriz_prob[Sort_Mean_c[count_up]][j] * CalcularDEQ(treino[n], dic[j]);
                             
                             if(dist_aux > dist) break;
@@ -1062,23 +1055,9 @@ void SWARM_COVQ::Ordenar(int *Sort_Mean_c, int *Sort_Mean_inv, double *Mean_c)
     
     for(n = 1; n < N; n++)
     {
-        if(Mean_c[n] > Mean_c[Sort_Mean_c[n-1]])
+        if(Mean_c[n] >= Mean_c[Sort_Mean_c[n-1]])
         {
             Sort_Mean_c[n] = n;
-        }
-        else if (Mean_c[n] == Mean_c[Sort_Mean_c[n-1]])
-        {
-            index = n - 2;
-            
-            while (index >= 0 && Mean_c[n] == Mean_c[Sort_Mean_c[index]])
-            {
-                index--;
-            }
-            
-            if (index >= 0)
-                Sort_Mean_c[n] = index;
-            else
-                Sort_Mean_c[n] = n + 1;
         }
         else
         {
